@@ -10,7 +10,7 @@ PROMOS_CACHE_FILE = "known_promos.json"
 
 KEYWORDS = [
     "agent", "semantic kernel", "machine learning", "data engineer", 
-    "data scientist", "openai", "ai-102", "dp-100", "dp-600", "vertex ai",
+    "data scientist", "openai", "ai-102", "ai-500", "dp-100", "dp-600", "vertex ai",
     "fabric", "deep learning", "langchain", "llamaindex"
 ]
 
@@ -23,7 +23,9 @@ SUBREDDIT_URLS = [
 
 TRIGGER_KEYWORDS = [
     "free voucher", "100% off", "cloud skills challenge", 
-    "free exam", "discount code", "arcade points", "free certification"
+    "free exam", "discount code", "arcade points", "free certification",
+    "ai fest", "ai tour", "microsoft build", "microsoft ignite",
+    "free voucher code", "exam voucher", "100% discount", "voucher drop"
 ]
 
 def send_telegram(message: str):
@@ -82,10 +84,9 @@ def check_official_certs():
                 known_uids.add(uid)
 
     print(f"Found {len(new_certs)} new matching official certifications.")
-    # Alert for up to 3 at a time so we don't spam on initial run
     for c in new_certs[:5]:
         msg = (
-            f"🎓 *New AI / Data Science Cert Detected!*\n\n"
+            f"🎓 *Active AI / Data Science Cert Detected!*\n\n"
             f"📌 *Title:* {c['title']}\n"
             f"🔗 [View Official Page]({c['url']})"
         )
@@ -122,9 +123,9 @@ def check_free_promotions():
                 if any(kw in text for kw in TRIGGER_KEYWORDS):
                     if pid not in known_promos:
                         msg = (
-                            f"🚨 *FREE VOUCHER / PROMOTION DETECTED!* 🚨\n\n"
-                            f"📢 *Deal:* {title}\n\n"
-                            f"🔗 [Claim / View Reddit Post](https://reddit.com{d.get('permalink')})"
+                            f"🚨 *FREE VOUCHER / EVENT PROMO DETECTED!* 🚨\n\n"
+                            f"📢 *Event/Deal:* {title}\n\n"
+                            f"🔗 [Claim / View Details](https://reddit.com{d.get('permalink')})"
                         )
                         send_telegram(msg)
                         known_promos.add(pid)
