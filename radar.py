@@ -63,6 +63,10 @@ def check_official_certs():
 
     new_certs = []
     for cert in data.get("certifications", []):
+        # Skip retired certifications
+        if cert.get("is_retired", False):
+            continue
+
         uid = cert.get("uid")
         title = cert.get("title", "")
         summary = cert.get("summary", "")
