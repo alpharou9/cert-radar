@@ -3,7 +3,9 @@ import json
 import requests
 
 TELEGRAM_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "9246640626:AAFY90tZ5rhKxfZaWFmhh97ykvD9oFh3pFM")
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "904278297")
+# Can be a single ID or comma-separated list of IDs: "904278297, 555123456"
+RAW_CHAT_IDS = os.getenv("TELEGRAM_CHAT_ID", "904278297")
+TELEGRAM_CHAT_IDS = [cid.strip() for cid in RAW_CHAT_IDS.split(",") if cid.strip()]
 
 CERTS_CACHE_FILE = "known_certs.json"
 PROMOS_CACHE_FILE = "known_promos.json"
@@ -14,7 +16,6 @@ KEYWORDS = [
     "vertex ai", "fabric", "deep learning", "langchain", "llamaindex"
 ]
 
-# 1. Reddit search feeds across major certification & voucher subreddits
 SUBREDDIT_URLS = [
     "https://www.reddit.com/r/AzureCertification/search.json?q=voucher+OR+free+OR+challenge+OR+fest&restrict_sr=1&sort=new&limit=15",
     "https://www.reddit.com/r/googlecloud/search.json?q=free+voucher+OR+arcade+OR+innovators&restrict_sr=1&sort=new&limit=15",
@@ -23,7 +24,6 @@ SUBREDDIT_URLS = [
     "https://www.reddit.com/r/devops/search.json?q=free+certification+OR+voucher&restrict_sr=1&sort=new&limit=10"
 ]
 
-# 2. Open-source GitHub trackers monitoring active voucher offers
 GITHUB_TRACKERS = [
     "https://api.github.com/repos/nisalgunawardhana/microsoft-certification-voucher-offers/commits?per_page=5"
 ]
@@ -37,21 +37,24 @@ TRIGGER_KEYWORDS = [
 ]
 
 def send_telegram(message: str):
-    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_ID:
+    if not TELEGRAM_TOKEN or not TELEGRAM_CHAT_IDS:
         print("Missing TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID!")
         return
     url = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
-    payload = {
-        "chat_id": TELEGRAM_CHAT_ID,
-        "text": message,
-        "parse_mode": "Markdown",
-        "disable_web_page_preview": False
-    }
-    try:
-        resp = requests.post(url, json=payload, timeout=10)
-        print("Telegram notification status:", resp.status_code)
-    except Exception as e:
-        print(f"Error sending to Telegram: {e}")
+    
+    # Broadcast message to all registered chat IDs
+    for chat_id in TELEGRAM_CHAT_IDS:
+        payload = {
+            "chat_id": chat_id,
+            "text": message,
+            "parse_mode": "Markdown",
+            "disable_web_page_preview": False
+        }
+        try:
+            resp = requests.post(url, json=payload, timeout=10)
+            print(f"Delivered to {chat_id}: status {resp.status_code}")
+        except Exception as e:
+            print(f"Error sending to {chat_id}: {e}")
 
 def check_official_certs():
     print("Checking Microsoft Learn API for active certifications...")
