@@ -1,15 +1,15 @@
 [
-  "certification.agentic-ai-business-solutions-architect",
-  "certification.fabric-data-engineer-associate",
-  "certification.implementing-data-engineering-solutions-using-azure-databricks",
   "certification.operationalizing-machine-learning-and-generative-ai-solutions",
-  "certification.agentic-devops-engineer-expert",
-  "certification.fabric-analytics-engineer-associate",
-  "certification.agentic-ai-business-professional",
-  "certification.azure-ai-apps-and-agents-developer-associate",
-  "certification.multi-agent-ai-solutions-expert",
-  "certification.azure-data-scientist",
   "certification.ai-agent-builder-associate",
+  "certification.agentic-devops-engineer-expert",
   "certification.agentic-ai-developer",
-  "certification.copilot-and-agent-administration-fundamentals"
+  "certification.azure-data-scientist",
+  "certification.azure-ai-apps-and-agents-developer-associate",
+  "certification.agentic-ai-business-professional",
+  "certification.fabric-analytics-engineer-associate",
+  "certification.implementing-data-engineering-solutions-using-azure-databricks",
+  "certification.multi-agent-ai-solutions-expert",
+  "certification.copilot-and-agent-administration-fundamentals",
+  "certification.agentic-ai-business-solutions-architect",
+  "certification.fabric-data-engineer-associate"
 ]
